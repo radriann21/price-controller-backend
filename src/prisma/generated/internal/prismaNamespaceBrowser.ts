@@ -89,7 +89,8 @@ export const ProductsScalarFieldEnum = {
   profitMargin: 'profitMargin',
   priceVes: 'priceVes',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  isActive: 'isActive'
 } as const
 
 export type ProductsScalarFieldEnum = (typeof ProductsScalarFieldEnum)[keyof typeof ProductsScalarFieldEnum]

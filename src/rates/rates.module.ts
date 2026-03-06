@@ -5,6 +5,7 @@ import { PrismaModule } from 'src/prisma/prisma.module';
 import { Logger } from '@nestjs/common';
 
 @Module({
+  exports: [RatesService],
   controllers: [RatesController],
   providers: [RatesService, Logger],
   imports: [PrismaModule],

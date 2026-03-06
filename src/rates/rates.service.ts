@@ -2,6 +2,7 @@ import {
   BadGatewayException,
   Injectable,
   InternalServerErrorException,
+  NotFoundException,
 } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { ConfigService } from '@nestjs/config';
@@ -37,6 +38,28 @@ export class RatesService {
       });
     } catch (err) {
       this.logger.error('Ha ocurrido un error:', err);
+      throw new InternalServerErrorException('No se encontro el precio actual');
+    }
+  }
+
+  async getActualRate() {
+    try {
+      const rate = await this.prisma.exchangeRates.findFirst({
+        orderBy: {
+          createdAt: 'desc',
+        },
+      });
+
+      if (!rate) {
+        throw new NotFoundException('No se encontro el precio actual');
+      }
+
+      return rate;
+    } catch (err) {
+      this.logger.error(
+        'Ha ocurrido un error al obtener el precio actual',
+        err,
+      );
       throw new InternalServerErrorException('No se encontro el precio actual');
     }
   }

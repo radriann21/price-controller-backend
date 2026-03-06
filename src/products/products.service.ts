@@ -52,6 +52,26 @@ export class ProductsService {
     }
   }
 
+  async getProductById(id: string) {
+    try {
+      const product = await this.prisma.products.findUnique({
+        where: { id },
+      });
+
+      if (!product) {
+        this.logger.warn('Product not found');
+        return null;
+      }
+
+      return product;
+    } catch (err) {
+      this.logger.error('Error obteniendo el producto', err);
+      throw new InternalServerErrorException(
+        'Ocurrió un error al obtener el producto',
+      );
+    }
+  }
+
   async getProductByName(name: string) {
     try {
       const product = await this.prisma.products.findFirst({
@@ -112,6 +132,40 @@ export class ProductsService {
       this.logger.error('Error deleting product', err);
       throw new InternalServerErrorException(
         'Ocurrió un error al eliminar el producto',
+      );
+    }
+  }
+
+  async updateProductsPrices() {
+    const actualRate = await this.prisma.exchangeRates.findFirst({
+      orderBy: {
+        createdAt: 'desc',
+      },
+    });
+
+    if (!actualRate) {
+      this.logger.error('Exchange rate not found');
+      throw new NotFoundException('Tipo de cambio no encontrado');
+    }
+
+    try {
+      return await this.prisma.$transaction(async (tx) => {
+        await tx.$queryRaw`
+          INSERT INTO "historyPrices" ("id", "oldPriceVes", "newPriceVes", "product_id")
+          SELECT gen_random_uuid(), "priceVes", ("costUsd" * (1 + "profitMargin" / 100) * ${actualRate.rate}), id
+          FROM "Products"
+        `;
+
+        await tx.$queryRaw`
+          UPDATE "Products"
+          SET "priceVes" = "costUsd" * (1 + "profitMargin" / 100) * ${actualRate.rate},
+              "updatedAt" = NOW()
+        `;
+      });
+    } catch (err) {
+      this.logger.error('Error updating products prices', err);
+      throw new InternalServerErrorException(
+        'Ocurrió un error al actualizar los precios de los productos',
       );
     }
   }

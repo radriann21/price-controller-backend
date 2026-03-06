@@ -29,9 +29,15 @@ export class ProductsController {
   }
 
   @HttpCode(200)
-  @Get(':name')
+  @Get('/name/:name')
   findOne(@Param('name') name: string) {
     return this.productsService.getProductByName(name);
+  }
+
+  @HttpCode(200)
+  @Get('/id/:id')
+  findOneById(@Param('id') id: string) {
+    return this.productsService.getProductById(id);
   }
 
   @HttpCode(200)
@@ -44,5 +50,11 @@ export class ProductsController {
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.productsService.deleteProduct(id);
+  }
+
+  @HttpCode(204)
+  @Post('update')
+  updateAll() {
+    return this.productsService.updateProductsPrices();
   }
 }

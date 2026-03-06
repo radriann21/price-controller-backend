@@ -16,7 +16,7 @@ datasource db {
 
 model ExchangeRates {
   id Int @id @default(autoincrement())
-  source String
+  source String @unique
   rate Decimal @db.Decimal(10,2)
   createdAt DateTime @default(now())
 }
@@ -29,6 +29,7 @@ model Products {
   priceVes Decimal @db.Decimal(10,2)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  isActive Boolean @default(true)
   historyPrices historyPrices[]
 }
 

@@ -1,0 +1,118 @@
+import {
+  Injectable,
+  InternalServerErrorException,
+  NotFoundException,
+} from '@nestjs/common';
+import { CreateProductDto } from './dto/create-product.dto';
+import { UpdateProductDto } from './dto/update-product.dto';
+import { PrismaService } from 'src/prisma/prisma.service';
+import { Logger } from '@nestjs/common';
+
+@Injectable()
+export class ProductsService {
+  private readonly logger = new Logger(ProductsService.name);
+
+  constructor(private readonly prisma: PrismaService) {}
+
+  async createNewProduct(createProductDto: CreateProductDto) {
+    try {
+      const product = await this.prisma.products.create({
+        data: createProductDto,
+      });
+
+      if (!product) {
+        this.logger.error('Product not created');
+        throw new InternalServerErrorException('No se pudo crear el producto');
+      }
+
+      return product;
+    } catch (err) {
+      this.logger.error('Error creating new product', err);
+      throw new InternalServerErrorException(
+        'Ocurrió un error al crear el producto',
+      );
+    }
+  }
+
+  async getAllProducts() {
+    try {
+      const products = await this.prisma.products.findMany();
+
+      if (products.length === 0) {
+        this.logger.warn('No products found');
+        return [];
+      }
+
+      return products;
+    } catch (err) {
+      this.logger.error('Error getting products', err);
+      throw new InternalServerErrorException(
+        'Ocurrió un error al obtener los productos',
+      );
+    }
+  }
+
+  async getProductByName(name: string) {
+    try {
+      const product = await this.prisma.products.findFirst({
+        where: { name: { equals: name, mode: 'insensitive' } },
+      });
+
+      if (!product) {
+        this.logger.warn('Product not found');
+        return null;
+      }
+
+      return product;
+    } catch (err) {
+      this.logger.error('Error obteniendo el producto', err);
+      throw new InternalServerErrorException(
+        'Ocurrió un error al obtener el producto',
+      );
+    }
+  }
+
+  async updateProduct(id: string, updateProductDto: UpdateProductDto) {
+    try {
+      const updatedProduct = await this.prisma.products.update({
+        where: { id },
+        data: updateProductDto,
+      });
+
+      if (!updatedProduct) {
+        this.logger.error('Product not found');
+        throw new NotFoundException('Producto no encontrado');
+      }
+
+      return updatedProduct;
+    } catch (err) {
+      this.logger.error('Error updating product', err);
+      throw new InternalServerErrorException(
+        'Ocurrió un error al actualizar el producto',
+      );
+    }
+  }
+
+  async deleteProduct(id: string) {
+    try {
+      const updatedProduct = await this.prisma.products.update({
+        where: { id },
+        data: { isActive: false },
+      });
+
+      if (!updatedProduct) {
+        this.logger.error('Product not found');
+        throw new NotFoundException('Producto no encontrado');
+      }
+
+      return {
+        message: 'Producto desactivado correctamente',
+      };
+    } catch (err) {
+      this.logger.error('Error deleting product', err);
+      throw new InternalServerErrorException(
+        'Ocurrió un error al eliminar el producto',
+      );
+    }
+  }
+}

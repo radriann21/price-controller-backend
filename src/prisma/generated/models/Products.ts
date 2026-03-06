@@ -46,6 +46,7 @@ export type ProductsMinAggregateOutputType = {
   priceVes: runtime.Decimal | null
   createdAt: Date | null
   updatedAt: Date | null
+  isActive: boolean | null
 }
 
 export type ProductsMaxAggregateOutputType = {
@@ -56,6 +57,7 @@ export type ProductsMaxAggregateOutputType = {
   priceVes: runtime.Decimal | null
   createdAt: Date | null
   updatedAt: Date | null
+  isActive: boolean | null
 }
 
 export type ProductsCountAggregateOutputType = {
@@ -66,6 +68,7 @@ export type ProductsCountAggregateOutputType = {
   priceVes: number
   createdAt: number
   updatedAt: number
+  isActive: number
   _all: number
 }
 
@@ -90,6 +93,7 @@ export type ProductsMinAggregateInputType = {
   priceVes?: true
   createdAt?: true
   updatedAt?: true
+  isActive?: true
 }
 
 export type ProductsMaxAggregateInputType = {
@@ -100,6 +104,7 @@ export type ProductsMaxAggregateInputType = {
   priceVes?: true
   createdAt?: true
   updatedAt?: true
+  isActive?: true
 }
 
 export type ProductsCountAggregateInputType = {
@@ -110,6 +115,7 @@ export type ProductsCountAggregateInputType = {
   priceVes?: true
   createdAt?: true
   updatedAt?: true
+  isActive?: true
   _all?: true
 }
 
@@ -207,6 +213,7 @@ export type ProductsGroupByOutputType = {
   priceVes: runtime.Decimal
   createdAt: Date
   updatedAt: Date
+  isActive: boolean
   _count: ProductsCountAggregateOutputType | null
   _avg: ProductsAvgAggregateOutputType | null
   _sum: ProductsSumAggregateOutputType | null
@@ -240,6 +247,7 @@ export type ProductsWhereInput = {
   priceVes?: Prisma.DecimalFilter<"Products"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   createdAt?: Prisma.DateTimeFilter<"Products"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Products"> | Date | string
+  isActive?: Prisma.BoolFilter<"Products"> | boolean
   historyPrices?: Prisma.HistoryPricesListRelationFilter
 }
 
@@ -251,6 +259,7 @@ export type ProductsOrderByWithRelationInput = {
   priceVes?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  isActive?: Prisma.SortOrder
   historyPrices?: Prisma.historyPricesOrderByRelationAggregateInput
 }
 
@@ -265,6 +274,7 @@ export type ProductsWhereUniqueInput = Prisma.AtLeast<{
   priceVes?: Prisma.DecimalFilter<"Products"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   createdAt?: Prisma.DateTimeFilter<"Products"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Products"> | Date | string
+  isActive?: Prisma.BoolFilter<"Products"> | boolean
   historyPrices?: Prisma.HistoryPricesListRelationFilter
 }, "id">
 
@@ -276,6 +286,7 @@ export type ProductsOrderByWithAggregationInput = {
   priceVes?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  isActive?: Prisma.SortOrder
   _count?: Prisma.ProductsCountOrderByAggregateInput
   _avg?: Prisma.ProductsAvgOrderByAggregateInput
   _max?: Prisma.ProductsMaxOrderByAggregateInput
@@ -294,6 +305,7 @@ export type ProductsScalarWhereWithAggregatesInput = {
   priceVes?: Prisma.DecimalWithAggregatesFilter<"Products"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Products"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Products"> | Date | string
+  isActive?: Prisma.BoolWithAggregatesFilter<"Products"> | boolean
 }
 
 export type ProductsCreateInput = {
@@ -304,6 +316,7 @@ export type ProductsCreateInput = {
   priceVes: runtime.Decimal | runtime.DecimalJsLike | number | string
   createdAt?: Date | string
   updatedAt?: Date | string
+  isActive?: boolean
   historyPrices?: Prisma.historyPricesCreateNestedManyWithoutProductsInput
 }
 
@@ -315,6 +328,7 @@ export type ProductsUncheckedCreateInput = {
   priceVes: runtime.Decimal | runtime.DecimalJsLike | number | string
   createdAt?: Date | string
   updatedAt?: Date | string
+  isActive?: boolean
   historyPrices?: Prisma.historyPricesUncheckedCreateNestedManyWithoutProductsInput
 }
 
@@ -326,6 +340,7 @@ export type ProductsUpdateInput = {
   priceVes?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   historyPrices?: Prisma.historyPricesUpdateManyWithoutProductsNestedInput
 }
 
@@ -337,6 +352,7 @@ export type ProductsUncheckedUpdateInput = {
   priceVes?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
   historyPrices?: Prisma.historyPricesUncheckedUpdateManyWithoutProductsNestedInput
 }
 
@@ -348,6 +364,7 @@ export type ProductsCreateManyInput = {
   priceVes: runtime.Decimal | runtime.DecimalJsLike | number | string
   createdAt?: Date | string
   updatedAt?: Date | string
+  isActive?: boolean
 }
 
 export type ProductsUpdateManyMutationInput = {
@@ -358,6 +375,7 @@ export type ProductsUpdateManyMutationInput = {
   priceVes?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
 }
 
 export type ProductsUncheckedUpdateManyInput = {
@@ -368,6 +386,7 @@ export type ProductsUncheckedUpdateManyInput = {
   priceVes?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
 }
 
 export type ProductsCountOrderByAggregateInput = {
@@ -378,6 +397,7 @@ export type ProductsCountOrderByAggregateInput = {
   priceVes?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  isActive?: Prisma.SortOrder
 }
 
 export type ProductsAvgOrderByAggregateInput = {
@@ -394,6 +414,7 @@ export type ProductsMaxOrderByAggregateInput = {
   priceVes?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  isActive?: Prisma.SortOrder
 }
 
 export type ProductsMinOrderByAggregateInput = {
@@ -404,6 +425,7 @@ export type ProductsMinOrderByAggregateInput = {
   priceVes?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  isActive?: Prisma.SortOrder
 }
 
 export type ProductsSumOrderByAggregateInput = {
@@ -415,6 +437,10 @@ export type ProductsSumOrderByAggregateInput = {
 export type ProductsScalarRelationFilter = {
   is?: Prisma.ProductsWhereInput
   isNot?: Prisma.ProductsWhereInput
+}
+
+export type BoolFieldUpdateOperationsInput = {
+  set?: boolean
 }
 
 export type ProductsCreateNestedOneWithoutHistoryPricesInput = {
@@ -439,6 +465,7 @@ export type ProductsCreateWithoutHistoryPricesInput = {
   priceVes: runtime.Decimal | runtime.DecimalJsLike | number | string
   createdAt?: Date | string
   updatedAt?: Date | string
+  isActive?: boolean
 }
 
 export type ProductsUncheckedCreateWithoutHistoryPricesInput = {
@@ -449,6 +476,7 @@ export type ProductsUncheckedCreateWithoutHistoryPricesInput = {
   priceVes: runtime.Decimal | runtime.DecimalJsLike | number | string
   createdAt?: Date | string
   updatedAt?: Date | string
+  isActive?: boolean
 }
 
 export type ProductsCreateOrConnectWithoutHistoryPricesInput = {
@@ -475,6 +503,7 @@ export type ProductsUpdateWithoutHistoryPricesInput = {
   priceVes?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
 }
 
 export type ProductsUncheckedUpdateWithoutHistoryPricesInput = {
@@ -485,6 +514,7 @@ export type ProductsUncheckedUpdateWithoutHistoryPricesInput = {
   priceVes?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  isActive?: Prisma.BoolFieldUpdateOperationsInput | boolean
 }
 
 
@@ -526,6 +556,7 @@ export type ProductsSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
   priceVes?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  isActive?: boolean
   historyPrices?: boolean | Prisma.Products$historyPricesArgs<ExtArgs>
   _count?: boolean | Prisma.ProductsCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["products"]>
@@ -538,6 +569,7 @@ export type ProductsSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exte
   priceVes?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  isActive?: boolean
 }, ExtArgs["result"]["products"]>
 
 export type ProductsSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -548,6 +580,7 @@ export type ProductsSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exte
   priceVes?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  isActive?: boolean
 }, ExtArgs["result"]["products"]>
 
 export type ProductsSelectScalar = {
@@ -558,9 +591,10 @@ export type ProductsSelectScalar = {
   priceVes?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  isActive?: boolean
 }
 
-export type ProductsOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "costUsd" | "profitMargin" | "priceVes" | "createdAt" | "updatedAt", ExtArgs["result"]["products"]>
+export type ProductsOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "costUsd" | "profitMargin" | "priceVes" | "createdAt" | "updatedAt" | "isActive", ExtArgs["result"]["products"]>
 export type ProductsInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   historyPrices?: boolean | Prisma.Products$historyPricesArgs<ExtArgs>
   _count?: boolean | Prisma.ProductsCountOutputTypeDefaultArgs<ExtArgs>
@@ -581,6 +615,7 @@ export type $ProductsPayload<ExtArgs extends runtime.Types.Extensions.InternalAr
     priceVes: runtime.Decimal
     createdAt: Date
     updatedAt: Date
+    isActive: boolean
   }, ExtArgs["result"]["products"]>
   composites: {}
 }
@@ -1012,6 +1047,7 @@ export interface ProductsFieldRefs {
   readonly priceVes: Prisma.FieldRef<"Products", 'Decimal'>
   readonly createdAt: Prisma.FieldRef<"Products", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Products", 'DateTime'>
+  readonly isActive: Prisma.FieldRef<"Products", 'Boolean'>
 }
     
 

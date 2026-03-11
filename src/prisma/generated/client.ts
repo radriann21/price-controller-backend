@@ -54,3 +54,8 @@ export type Products = Prisma.ProductsModel
  * 
  */
 export type historyPrices = Prisma.historyPricesModel
+/**
+ * Model Users
+ * 
+ */
+export type Users = Prisma.UsersModel

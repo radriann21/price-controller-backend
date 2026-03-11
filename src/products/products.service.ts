@@ -7,6 +7,7 @@ import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { Logger } from '@nestjs/common';
+import { PaginationDto } from './dto/pagination.dto';
 
 @Injectable()
 export class ProductsService {
@@ -34,16 +35,45 @@ export class ProductsService {
     }
   }
 
-  async getAllProducts() {
+  async getAllProducts(query: PaginationDto) {
+    const { page = 1, limit = 10 } = query;
+    const skip = (page - 1) * limit;
+
     try {
-      const products = await this.prisma.products.findMany();
+      const [products, total] = await this.prisma.$transaction([
+        this.prisma.products.findMany({
+          skip,
+          take: limit,
+          where: { isActive: true },
+          orderBy: { createdAt: 'desc' },
+        }),
+        this.prisma.products.count({
+          where: { isActive: true },
+        }),
+      ]);
 
       if (products.length === 0) {
         this.logger.warn('No products found');
-        return [];
+        return {
+          data: [],
+          meta: {
+            total: 0,
+            page,
+            limit,
+            totalPages: 0,
+          },
+        };
       }
 
-      return products;
+      return {
+        data: products,
+        meta: {
+          total,
+          page,
+          limit,
+          totalPages: Math.ceil(total / limit),
+        },
+      };
     } catch (err) {
       this.logger.error('Error getting products', err);
       throw new InternalServerErrorException(

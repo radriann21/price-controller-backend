@@ -25,17 +25,26 @@ export class RatesService {
   async getAndCreateNewRate() {
     try {
       const newRate = await this.fetchExternalRate();
+      const lastRate = await this.prisma.exchangeRates.findFirst({
+        orderBy: {
+          createdAt: 'desc',
+        },
+      });
 
       if (!newRate) {
         throw new BadGatewayException('No se encontro el precio actual');
       }
 
-      return await this.prisma.exchangeRates.create({
-        data: {
-          source: 'BCV',
-          rate: newRate.price,
-        },
-      });
+      if (!lastRate || Number(lastRate.rate) !== Number(newRate.price)) {
+        return await this.prisma.exchangeRates.create({
+          data: {
+            source: 'BCV',
+            rate: newRate.price,
+          },
+        });
+      }
+
+      return lastRate;
     } catch (err) {
       this.logger.error('Ha ocurrido un error:', err);
       throw new InternalServerErrorException('No se encontro el precio actual');

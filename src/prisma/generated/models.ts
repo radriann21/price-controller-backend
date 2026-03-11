@@ -11,4 +11,5 @@
 export type * from './models/ExchangeRates.js'
 export type * from './models/Products.js'
 export type * from './models/historyPrices.js'
+export type * from './models/Users.js'
 export type * from './commonInputTypes.js'

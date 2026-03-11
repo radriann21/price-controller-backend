@@ -7,11 +7,16 @@ import {
   Param,
   Delete,
   HttpCode,
+  Query,
+  UseGuards,
 } from '@nestjs/common';
 import { ProductsService } from './products.service';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
+import { PaginationDto } from './dto/pagination.dto';
+import { AuthGuard } from 'src/auth/guards/auth.guard';
 
+@UseGuards(AuthGuard)
 @Controller('products')
 export class ProductsController {
   constructor(private readonly productsService: ProductsService) {}
@@ -24,8 +29,8 @@ export class ProductsController {
 
   @HttpCode(200)
   @Get()
-  findAll() {
-    return this.productsService.getAllProducts();
+  findAll(@Query() query: PaginationDto) {
+    return this.productsService.getAllProducts(query);
   }
 
   @HttpCode(200)
@@ -40,6 +45,12 @@ export class ProductsController {
     return this.productsService.getProductById(id);
   }
 
+  @HttpCode(204)
+  @Patch('prices/update')
+  updateAll() {
+    return this.productsService.updateProductsPrices();
+  }
+
   @HttpCode(200)
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateProductDto: UpdateProductDto) {
@@ -50,11 +61,5 @@ export class ProductsController {
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.productsService.deleteProduct(id);
-  }
-
-  @HttpCode(204)
-  @Post('update')
-  updateAll() {
-    return this.productsService.updateProductsPrices();
   }
 }

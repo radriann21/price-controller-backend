@@ -53,7 +53,8 @@ export const AnyNull = runtime.AnyNull
 export const ModelName = {
   ExchangeRates: 'ExchangeRates',
   Products: 'Products',
-  historyPrices: 'historyPrices'
+  historyPrices: 'historyPrices',
+  Users: 'Users'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -104,6 +105,18 @@ export const HistoryPricesScalarFieldEnum = {
 } as const
 
 export type HistoryPricesScalarFieldEnum = (typeof HistoryPricesScalarFieldEnum)[keyof typeof HistoryPricesScalarFieldEnum]
+
+
+export const UsersScalarFieldEnum = {
+  id: 'id',
+  username: 'username',
+  password: 'password',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  isActive: 'isActive'
+} as const
+
+export type UsersScalarFieldEnum = (typeof UsersScalarFieldEnum)[keyof typeof UsersScalarFieldEnum]
 
 
 export const SortOrder = {

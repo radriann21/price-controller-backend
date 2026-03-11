@@ -223,13 +223,13 @@ export type ExchangeRatesOrderByWithRelationInput = {
 
 export type ExchangeRatesWhereUniqueInput = Prisma.AtLeast<{
   id?: number
-  source?: string
   AND?: Prisma.ExchangeRatesWhereInput | Prisma.ExchangeRatesWhereInput[]
   OR?: Prisma.ExchangeRatesWhereInput[]
   NOT?: Prisma.ExchangeRatesWhereInput | Prisma.ExchangeRatesWhereInput[]
+  source?: Prisma.StringFilter<"ExchangeRates"> | string
   rate?: Prisma.DecimalFilter<"ExchangeRates"> | runtime.Decimal | runtime.DecimalJsLike | number | string
   createdAt?: Prisma.DateTimeFilter<"ExchangeRates"> | Date | string
-}, "id" | "source">
+}, "id">
 
 export type ExchangeRatesOrderByWithAggregationInput = {
   id?: Prisma.SortOrder

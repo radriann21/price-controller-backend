@@ -1,6 +1,9 @@
-import { Controller, HttpCode, Post } from '@nestjs/common';
+import { Controller, Get, HttpCode, Post } from '@nestjs/common';
 import { RatesService } from './rates.service';
+import { AuthGuard } from 'src/auth/guards/auth.guard';
+import { UseGuards } from '@nestjs/common';
 
+@UseGuards(AuthGuard)
 @Controller('rates')
 export class RatesController {
   constructor(private readonly ratesService: RatesService) {}
@@ -9,5 +12,11 @@ export class RatesController {
   @Post()
   create() {
     return this.ratesService.getAndCreateNewRate();
+  }
+
+  @HttpCode(200)
+  @Get('actual')
+  findActual() {
+    return this.ratesService.getActualRate();
   }
 }

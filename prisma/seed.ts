@@ -1,6 +1,7 @@
 import { PrismaClient } from 'src/prisma/generated/client';
 import { PrismaPg } from '@prisma/adapter-pg';
 import * as dotenv from 'dotenv';
+import * as bcrypt from 'bcrypt';
 
 dotenv.config();
 
@@ -11,6 +12,18 @@ const prisma = new PrismaClient({ adapter });
 
 async function main() {
   console.log('Starting seed...');
+
+  const hashedPassword = await bcrypt.hash('admin123', 10);
+
+  await prisma.users.create({
+    data: {
+      username: 'admin',
+      password: hashedPassword,
+      isActive: true,
+    },
+  });
+
+  console.log('✅ Admin user created!');
 
   const products = [
     {

@@ -16,7 +16,7 @@ datasource db {
 
 model ExchangeRates {
   id Int @id @default(autoincrement())
-  source String @unique
+  source String
   rate Decimal @db.Decimal(10,2)
   createdAt DateTime @default(now())
 }
@@ -39,4 +39,13 @@ model historyPrices {
   newPriceVes Decimal @db.Decimal(10,2)
   products  Products @relation(fields: [product_id], references: [id])
   product_id String
+}
+
+model Users {
+  id String @default(uuid()) @id 
+  username String
+  password String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  isActive Boolean @default(true)
 }

@@ -13,6 +13,13 @@ async function bootstrap() {
     origin: 'http://localhost:5173',
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     credentials: true,
+    allowedHeaders: [
+      'Content-Type',
+      'Authorization',
+      'Accept',
+      'Cache-Control',
+    ],
+    exposedHeaders: ['Content-Type', 'Cache-Control'],
   });
 
   app.setGlobalPrefix('api');

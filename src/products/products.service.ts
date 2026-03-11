@@ -8,6 +8,7 @@ import { UpdateProductDto } from './dto/update-product.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { Logger } from '@nestjs/common';
 import { PaginationDto } from './dto/pagination.dto';
+import { ProductsWhereInput } from 'src/prisma/generated/models';
 
 @Injectable()
 export class ProductsService {
@@ -36,19 +37,22 @@ export class ProductsService {
   }
 
   async getAllProducts(query: PaginationDto) {
-    const { page = 1, limit = 10 } = query;
+    const { page = 1, limit = 10, search } = query;
     const skip = (page - 1) * limit;
+    const where: ProductsWhereInput = { isActive: true };
+
+    if (search) {
+      where.OR = [{ name: { contains: search, mode: 'insensitive' } }];
+    }
 
     try {
-      const [products, total] = await this.prisma.$transaction([
+      const [total, products] = await this.prisma.$transaction([
+        this.prisma.products.count({ where }),
         this.prisma.products.findMany({
           skip,
           take: limit,
-          where: { isActive: true },
+          where,
           orderBy: { createdAt: 'desc' },
-        }),
-        this.prisma.products.count({
-          where: { isActive: true },
         }),
       ]);
 

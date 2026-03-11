@@ -1,4 +1,4 @@
-import { Controller, Get, HttpCode, Post } from '@nestjs/common';
+import { Controller, Get, HttpCode, Post, Sse } from '@nestjs/common';
 import { RatesService } from './rates.service';
 import { AuthGuard } from 'src/auth/guards/auth.guard';
 import { UseGuards } from '@nestjs/common';
@@ -18,5 +18,10 @@ export class RatesController {
   @Get('actual')
   findActual() {
     return this.ratesService.getActualRate();
+  }
+
+  @Sse('cron-update')
+  cronUpdate() {
+    return this.ratesService.cronUpdate();
   }
 }

@@ -7,7 +7,7 @@ import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { Logger } from '@nestjs/common';
-import { PaginationDto } from './dto/pagination.dto';
+import { PaginationDto } from '../common/dto/pagination.dto';
 import { ProductsWhereInput } from 'src/prisma/generated/models';
 
 @Injectable()

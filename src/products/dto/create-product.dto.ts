@@ -12,4 +12,7 @@ export class CreateProductDto {
 
   @IsNumber()
   priceVes: number;
+
+  @IsNumber()
+  categoryId: number;
 }

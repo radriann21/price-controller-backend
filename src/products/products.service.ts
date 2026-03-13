@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   Injectable,
   InternalServerErrorException,
   NotFoundException,
@@ -7,9 +8,12 @@ import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { Logger } from '@nestjs/common';
-import { PaginationDto } from './dto/pagination.dto';
-import { ProductsWhereInput } from 'src/prisma/generated/models';
-
+import { PaginationDto } from '../common/dto/pagination.dto';
+import {
+  ProductsCreateManyInput,
+  ProductsWhereInput,
+} from 'src/prisma/generated/models';
+import * as XLSX from 'xlsx';
 @Injectable()
 export class ProductsService {
   private readonly logger = new Logger(ProductsService.name);
@@ -201,6 +205,60 @@ export class ProductsService {
       throw new InternalServerErrorException(
         'Ocurrió un error al actualizar los precios de los productos',
       );
+    }
+  }
+
+  async importProductsFromExcel(file: Express.Multer.File) {
+    const workbook = XLSX.read(file.buffer, { type: 'buffer' });
+    const sheet = workbook.Sheets[workbook.SheetNames[0]];
+    const rawData = XLSX.utils.sheet_to_json(sheet, { header: 1 });
+
+    if (rawData.length === 0) {
+      throw new BadRequestException('Error al leer el archivo excel.');
+    }
+
+    const categories = await this.prisma.categories.findMany({
+      where: { isActive: true },
+    });
+
+    const mappedData = rawData.map(
+      (row: unknown[]): ProductsCreateManyInput => {
+        const name = row[0] as string;
+        const costUsd = row[1] as number;
+        const profitMargin = row[2] as number;
+        const priceVes = row[3] as number;
+        const categoryName = row[4] as string;
+
+        const category = categories.find((cat) => cat.name === categoryName);
+        if (!category) {
+          throw new BadRequestException(
+            `Categoría ${categoryName} no encontrada`,
+          );
+        }
+
+        return {
+          name,
+          costUsd,
+          profitMargin,
+          priceVes,
+          categoryId: category.id,
+        };
+      },
+    );
+
+    try {
+      const products = await this.prisma.products.createManyAndReturn({
+        data: mappedData,
+      });
+
+      if (products.length === 0) {
+        throw new BadRequestException('No se pudieron importar los productos');
+      }
+
+      return products;
+    } catch (err) {
+      this.logger.error('Ha ocurrido un error en el servidor', err);
+      throw new InternalServerErrorException('Un error en el servidor');
     }
   }
 }

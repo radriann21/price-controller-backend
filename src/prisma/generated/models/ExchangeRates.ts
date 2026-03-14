@@ -330,14 +330,6 @@ export type ExchangeRatesSumOrderByAggregateInput = {
   rate?: Prisma.SortOrder
 }
 
-export type DecimalFieldUpdateOperationsInput = {
-  set?: runtime.Decimal | runtime.DecimalJsLike | number | string
-  increment?: runtime.Decimal | runtime.DecimalJsLike | number | string
-  decrement?: runtime.Decimal | runtime.DecimalJsLike | number | string
-  multiply?: runtime.Decimal | runtime.DecimalJsLike | number | string
-  divide?: runtime.Decimal | runtime.DecimalJsLike | number | string
-}
-
 
 
 export type ExchangeRatesSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -981,6 +973,11 @@ export type ExchangeRatesFindManyArgs<ExtArgs extends runtime.Types.Extensions.I
    * Skip the first `n` ExchangeRates.
    */
   skip?: number
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+   * 
+   * Filter by unique combinations of ExchangeRates.
+   */
   distinct?: Prisma.ExchangeRatesScalarFieldEnum | Prisma.ExchangeRatesScalarFieldEnum[]
 }
 

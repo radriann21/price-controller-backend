@@ -1137,6 +1137,11 @@ export type historyPricesFindManyArgs<ExtArgs extends runtime.Types.Extensions.I
    * Skip the first `n` historyPrices.
    */
   skip?: number
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+   * 
+   * Filter by unique combinations of historyPrices.
+   */
   distinct?: Prisma.HistoryPricesScalarFieldEnum | Prisma.HistoryPricesScalarFieldEnum[]
 }
 

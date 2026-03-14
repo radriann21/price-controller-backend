@@ -41,9 +41,13 @@ export class ProductsService {
   }
 
   async getAllProducts(query: PaginationDto) {
-    const { page = 1, limit = 10, search } = query;
+    const { page = 1, limit = 10, search, isActive } = query;
     const skip = (page - 1) * limit;
-    const where: ProductsWhereInput = { isActive: true };
+    const where: ProductsWhereInput = {};
+
+    if (isActive !== undefined) {
+      where.isActive = isActive;
+    }
 
     if (search) {
       where.OR = [
@@ -185,34 +189,46 @@ export class ProductsService {
 
   async updateProductsPrices() {
     const actualRate = await this.prisma.exchangeRates.findFirst({
-      orderBy: {
-        createdAt: 'desc',
-      },
+      orderBy: { createdAt: 'desc' },
     });
 
-    if (!actualRate) {
-      this.logger.error('Exchange rate not found');
-      throw new NotFoundException('Tipo de cambio no encontrado');
+    const globalMarginRecord = await this.prisma.globalProfitMargin.findUnique({
+      where: { id: 1 },
+    });
+
+    if (!actualRate || !globalMarginRecord) {
+      this.logger.error('Rate or Global Margin not found');
+      throw new NotFoundException(
+        'Faltan parámetros de configuración (Tasa o Margen Global)',
+      );
     }
+
+    const rate = actualRate.rate;
+    const globalMargin = globalMarginRecord.profitMargin;
 
     try {
       return await this.prisma.$transaction(async (tx) => {
         await tx.$queryRaw`
-          INSERT INTO "historyPrices" ("id", "oldPriceVes", "newPriceVes", "product_id")
-          SELECT gen_random_uuid(), "priceVes", ("costUsd" * (1 + "profitMargin" / 100) * ${actualRate.rate}), id
-          FROM "Products"
-        `;
+        INSERT INTO "historyPrices" ("id", "oldPriceVes", "newPriceVes", "product_id")
+        SELECT 
+          gen_random_uuid(), 
+          "priceVes", 
+          ("costUsd" * (1 + COALESCE("profitMargin", ${globalMargin}) / 100) * ${rate}), 
+          id
+        FROM "Products"
+      `;
 
         await tx.$queryRaw`
-          UPDATE "Products"
-          SET "priceVes" = "costUsd" * (1 + "profitMargin" / 100) * ${actualRate.rate},
-              "updatedAt" = NOW()
-        `;
+        UPDATE "Products"
+        SET 
+          "priceVes" = "costUsd" * (1 + COALESCE("profitMargin", ${globalMargin}) / 100) * ${rate},
+          "updatedAt" = NOW()
+      `;
       });
     } catch (err) {
       this.logger.error('Error updating products prices', err);
       throw new InternalServerErrorException(
-        'Ocurrió un error al actualizar los precios de los productos',
+        'Error al procesar la actualización masiva',
       );
     }
   }

@@ -51,6 +51,7 @@ export const AnyNull = runtime.AnyNull
 
 
 export const ModelName = {
+  globalProfitMargin: 'globalProfitMargin',
   Categories: 'Categories',
   ExchangeRates: 'ExchangeRates',
   Products: 'Products',
@@ -74,9 +75,20 @@ export const TransactionIsolationLevel = runtime.makeStrictEnum({
 export type TransactionIsolationLevel = (typeof TransactionIsolationLevel)[keyof typeof TransactionIsolationLevel]
 
 
+export const GlobalProfitMarginScalarFieldEnum = {
+  id: 'id',
+  profitMargin: 'profitMargin',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type GlobalProfitMarginScalarFieldEnum = (typeof GlobalProfitMarginScalarFieldEnum)[keyof typeof GlobalProfitMarginScalarFieldEnum]
+
+
 export const CategoriesScalarFieldEnum = {
   id: 'id',
   name: 'name',
+  description: 'description',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   isActive: 'isActive'
@@ -146,4 +158,12 @@ export const QueryMode = {
 } as const
 
 export type QueryMode = (typeof QueryMode)[keyof typeof QueryMode]
+
+
+export const NullsOrder = {
+  first: 'first',
+  last: 'last'
+} as const
+
+export type NullsOrder = (typeof NullsOrder)[keyof typeof NullsOrder]
 

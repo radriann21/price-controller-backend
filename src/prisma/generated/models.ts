@@ -8,6 +8,7 @@
  *
  * 🟢 You can import this file directly.
  */
+export type * from './models/globalProfitMargin.js'
 export type * from './models/Categories.js'
 export type * from './models/ExchangeRates.js'
 export type * from './models/Products.js'

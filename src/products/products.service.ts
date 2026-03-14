@@ -46,7 +46,10 @@ export class ProductsService {
     const where: ProductsWhereInput = { isActive: true };
 
     if (search) {
-      where.OR = [{ name: { contains: search, mode: 'insensitive' } }];
+      where.OR = [
+        { name: { contains: search, mode: 'insensitive' } },
+        { category: { name: { contains: search, mode: 'insensitive' } } },
+      ];
     }
 
     try {
@@ -56,7 +59,13 @@ export class ProductsService {
           skip,
           take: limit,
           where,
-          orderBy: { createdAt: 'desc' },
+          include: {
+            category: {
+              select: {
+                name: true,
+              },
+            },
+          },
         }),
       ]);
 

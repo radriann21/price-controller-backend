@@ -80,12 +80,12 @@ export type PrismaVersion = {
 }
 
 /**
- * Prisma Client JS version: 7.4.2
- * Query Engine version: 94a226be1cf2967af2541cca5529f0f7ba866919
+ * Prisma Client JS version: 7.5.0
+ * Query Engine version: 280c870be64f457428992c43c1f6d557fab6e29e
  */
 export const prismaVersion: PrismaVersion = {
-  client: "7.4.2",
-  engine: "94a226be1cf2967af2541cca5529f0f7ba866919"
+  client: "7.5.0",
+  engine: "280c870be64f457428992c43c1f6d557fab6e29e"
 }
 
 /**
@@ -384,6 +384,7 @@ type FieldRefInputType<Model, FieldType> = Model extends never ? never : FieldRe
 
 
 export const ModelName = {
+  globalProfitMargin: 'globalProfitMargin',
   Categories: 'Categories',
   ExchangeRates: 'ExchangeRates',
   Products: 'Products',
@@ -404,10 +405,84 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "categories" | "exchangeRates" | "products" | "historyPrices" | "users"
+    modelProps: "globalProfitMargin" | "categories" | "exchangeRates" | "products" | "historyPrices" | "users"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
+    globalProfitMargin: {
+      payload: Prisma.$globalProfitMarginPayload<ExtArgs>
+      fields: Prisma.globalProfitMarginFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.globalProfitMarginFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$globalProfitMarginPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.globalProfitMarginFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$globalProfitMarginPayload>
+        }
+        findFirst: {
+          args: Prisma.globalProfitMarginFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$globalProfitMarginPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.globalProfitMarginFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$globalProfitMarginPayload>
+        }
+        findMany: {
+          args: Prisma.globalProfitMarginFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$globalProfitMarginPayload>[]
+        }
+        create: {
+          args: Prisma.globalProfitMarginCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$globalProfitMarginPayload>
+        }
+        createMany: {
+          args: Prisma.globalProfitMarginCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.globalProfitMarginCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$globalProfitMarginPayload>[]
+        }
+        delete: {
+          args: Prisma.globalProfitMarginDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$globalProfitMarginPayload>
+        }
+        update: {
+          args: Prisma.globalProfitMarginUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$globalProfitMarginPayload>
+        }
+        deleteMany: {
+          args: Prisma.globalProfitMarginDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.globalProfitMarginUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.globalProfitMarginUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$globalProfitMarginPayload>[]
+        }
+        upsert: {
+          args: Prisma.globalProfitMarginUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$globalProfitMarginPayload>
+        }
+        aggregate: {
+          args: Prisma.GlobalProfitMarginAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateGlobalProfitMargin>
+        }
+        groupBy: {
+          args: Prisma.globalProfitMarginGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.GlobalProfitMarginGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.globalProfitMarginCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.GlobalProfitMarginCountAggregateOutputType> | number
+        }
+      }
+    }
     Categories: {
       payload: Prisma.$CategoriesPayload<ExtArgs>
       fields: Prisma.CategoriesFieldRefs
@@ -817,9 +892,20 @@ export const TransactionIsolationLevel = runtime.makeStrictEnum({
 export type TransactionIsolationLevel = (typeof TransactionIsolationLevel)[keyof typeof TransactionIsolationLevel]
 
 
+export const GlobalProfitMarginScalarFieldEnum = {
+  id: 'id',
+  profitMargin: 'profitMargin',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type GlobalProfitMarginScalarFieldEnum = (typeof GlobalProfitMarginScalarFieldEnum)[keyof typeof GlobalProfitMarginScalarFieldEnum]
+
+
 export const CategoriesScalarFieldEnum = {
   id: 'id',
   name: 'name',
+  description: 'description',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   isActive: 'isActive'
@@ -891,6 +977,14 @@ export const QueryMode = {
 export type QueryMode = (typeof QueryMode)[keyof typeof QueryMode]
 
 
+export const NullsOrder = {
+  first: 'first',
+  last: 'last'
+} as const
+
+export type NullsOrder = (typeof NullsOrder)[keyof typeof NullsOrder]
+
+
 
 /**
  * Field references
@@ -912,16 +1006,16 @@ export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel,
 
 
 /**
- * Reference to a field of type 'String'
+ * Reference to a field of type 'Decimal'
  */
-export type StringFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'String'>
+export type DecimalFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Decimal'>
     
 
 
 /**
- * Reference to a field of type 'String[]'
+ * Reference to a field of type 'Decimal[]'
  */
-export type ListStringFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'String[]'>
+export type ListDecimalFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Decimal[]'>
     
 
 
@@ -940,23 +1034,23 @@ export type ListDateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaM
 
 
 /**
+ * Reference to a field of type 'String'
+ */
+export type StringFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'String'>
+    
+
+
+/**
+ * Reference to a field of type 'String[]'
+ */
+export type ListStringFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'String[]'>
+    
+
+
+/**
  * Reference to a field of type 'Boolean'
  */
 export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
-    
-
-
-/**
- * Reference to a field of type 'Decimal'
- */
-export type DecimalFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Decimal'>
-    
-
-
-/**
- * Reference to a field of type 'Decimal[]'
- */
-export type ListDecimalFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Decimal[]'>
     
 
 
@@ -1068,6 +1162,7 @@ export type PrismaClientOptions = ({
   comments?: runtime.SqlCommenterPlugin[]
 }
 export type GlobalOmitConfig = {
+  globalProfitMargin?: Prisma.globalProfitMarginOmit
   categories?: Prisma.CategoriesOmit
   exchangeRates?: Prisma.ExchangeRatesOmit
   products?: Prisma.ProductsOmit

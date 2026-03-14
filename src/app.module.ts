@@ -9,6 +9,7 @@ import { HistoryPricesModule } from './history-prices/history-prices.module';
 import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
 import { CategoriesModule } from './categories/categories.module';
+import { GlobalProfitModule } from './global-profit/global-profit.module';
 
 @Module({
   imports: [
@@ -23,6 +24,7 @@ import { CategoriesModule } from './categories/categories.module';
     AuthModule,
     UsersModule,
     CategoriesModule,
+    GlobalProfitModule,
   ],
   controllers: [AppController],
   providers: [AppService],

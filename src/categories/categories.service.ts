@@ -31,10 +31,14 @@ export class CategoriesService {
   }
 
   async findAll(paginationDto: PaginationDto) {
-    const { page = 1, limit = 10, search } = paginationDto;
+    const { page = 1, limit = 10, search, isActive } = paginationDto;
 
     const skip = (page - 1) * limit;
-    const where: CategoriesWhereInput = { isActive: true };
+    const where: CategoriesWhereInput = {};
+
+    if (isActive !== undefined) {
+      where.isActive = isActive;
+    }
 
     if (search) {
       where.OR = [{ name: { contains: search, mode: 'insensitive' } }];

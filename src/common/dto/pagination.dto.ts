@@ -1,5 +1,5 @@
-import { Type } from 'class-transformer';
-import { IsOptional, IsInt, Min, IsString } from 'class-validator';
+import { Transform, Type } from 'class-transformer';
+import { IsOptional, IsInt, Min, IsString, IsBoolean } from 'class-validator';
 
 export class PaginationDto {
   @IsOptional()
@@ -17,4 +17,9 @@ export class PaginationDto {
   @IsOptional()
   @IsString()
   search?: string;
+
+  @IsOptional()
+  @IsBoolean()
+  @Transform(({ value }) => value === 'true')
+  isActive?: boolean;
 }

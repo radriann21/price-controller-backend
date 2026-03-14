@@ -41,9 +41,13 @@ export class ProductsService {
   }
 
   async getAllProducts(query: PaginationDto) {
-    const { page = 1, limit = 10, search } = query;
+    const { page = 1, limit = 10, search, isActive } = query;
     const skip = (page - 1) * limit;
-    const where: ProductsWhereInput = { isActive: true };
+    const where: ProductsWhereInput = {};
+
+    if (isActive !== undefined) {
+      where.isActive = isActive;
+    }
 
     if (search) {
       where.OR = [

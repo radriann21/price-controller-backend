@@ -1,98 +1,137 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# Price Controller Backend
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+## Descripción
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+API REST desarrollada con NestJS para la gestión de precios de productos con conversión automática de divisas (USD a VES). El sistema permite controlar el inventario de productos, organizarlos por categorías, configurar márgenes de ganancia tanto globales como individuales, y mantener un historial completo de los cambios de precios. Incluye actualización automática de tasas de cambio y exportación de datos a Excel.
 
-## Description
+## Tecnologías
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+- **NestJS**: Framework principal para la API
+- **PostgreSQL**: Base de datos relacional
+- **Prisma**: ORM para manejo de base de datos
+- **JWT + Passport**: Sistema de autenticación
+- **class-validator**: Validación de datos
+- **XLSX**: Exportación a Excel
+- **Docker**: Containerización
 
-## Project setup
+## Requisitos Previos
+
+- Node.js v18 o superior
+- PostgreSQL (local o remoto)
+- pnpm (gestor de paquetes recomendado)
+
+## Instalación
+
+1. Clonar el repositorio e instalar dependencias:
 
 ```bash
-$ pnpm install
+pnpm install
 ```
 
-## Compile and run the project
+2. Configurar variables de entorno creando un archivo `.env` en la raíz:
+
+```env
+DATABASE_URL="tu-url-de-base-de-datos"
+JWT_SECRET="tu-clave-secreta-segura"
+PORT=3000
+```
+
+3. Ejecutar migraciones de Prisma para crear las tablas:
 
 ```bash
-# development
-$ pnpm run start
-
-# watch mode
-$ pnpm run start:dev
-
-# production mode
-$ pnpm run start:prod
+pnpm prisma migrate dev
 ```
 
-## Run tests
+4. (Opcional) Poblar la base de datos con datos iniciales:
 
 ```bash
-# unit tests
-$ pnpm run test
-
-# e2e tests
-$ pnpm run test:e2e
-
-# test coverage
-$ pnpm run test:cov
+pnpm run prisma:seed
 ```
 
-## Deployment
+## Ejecución
 
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
+### Modo Desarrollo
+Inicia el servidor con hot-reload:
+```bash
+pnpm run start:dev
+```
+La API estará disponible en `http://localhost:3000`
 
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+### Modo Producción
+Compilar y ejecutar:
+```bash
+pnpm run build
+pnpm run start:prod
+```
+
+### Con Docker
+Levantar contenedores de la aplicación y base de datos:
+```bash
+docker-compose up -d
+```
+
+## Estructura del Proyecto
+
+```
+src/
+├── auth/              # Autenticación y autorización con JWT
+├── categories/        # CRUD de categorías de productos
+├── global-profit/     # Gestión del margen de ganancia global
+├── history-prices/    # Registro histórico de cambios de precios
+├── products/          # CRUD de productos y cálculo de precios
+├── rates/             # Tasas de cambio USD/VES
+├── users/             # Gestión de usuarios del sistema
+└── prisma/            # Configuración y cliente de Prisma
+```
+
+Cada módulo contiene su controlador, servicio y módulo siguiendo la arquitectura de NestJS.
+
+## API Endpoints
+
+### Autenticación
+- `POST /auth/login` - Iniciar sesión y obtener token JWT
+- `POST /auth/register` - Registrar nuevo usuario
+
+### Productos
+- `GET /products` - Listar todos los productos
+- `GET /products/:id` - Obtener un producto específico
+- `POST /products` - Crear nuevo producto
+- `PATCH /products/:id` - Actualizar producto existente
+- `DELETE /products/:id` - Eliminar producto (soft delete)
+- `POST /products/import-excel` - Importar productos desde Excel
+
+### Categorías
+- `GET /categories` - Listar todas las categorías
+- `POST /categories` - Crear nueva categoría
+- `PATCH /categories/:id` - Actualizar categoría
+- `DELETE /categories/:id` - Eliminar categoría
+
+### Tasas de Cambio
+- `POST /rates` - Obtener tasa de cambio actual y crear registro
+- `GET /rates/actual` - Obtener tasa de cambio actual
+- `SSE /rates/cron-update` - Endpoint SSE para notificaciones de actualización automática
+
+### Margen de Ganancia Global
+- `GET /global-margin` - Obtener margen global actual
+- `POST /global-margin` - Actualizar margen global
+
+## Scripts Disponibles
 
 ```bash
-$ pnpm install -g @nestjs/mau
-$ mau deploy
+pnpm run start:dev      # Inicia servidor en modo desarrollo con hot-reload
+pnpm run build          # Compila el proyecto TypeScript a JavaScript
+pnpm run start:prod     # Ejecuta la versión compilada en producción
+pnpm run lint           # Ejecuta ESLint para verificar código
+pnpm run format         # Formatea código con Prettier
+pnpm run test           # Ejecuta tests unitarios con Jest
+pnpm run prisma:seed    # Pobla la base de datos con datos de prueba
 ```
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+## Características Destacadas
 
-## Resources
-
-Check out a few resources that may come in handy when working with NestJS:
-
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
-
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+- Conversión automática de precios USD a VES basada en tasa de cambio actual
+- Cálculo automático de precio final aplicando margen de ganancia
+- Sistema de autenticación con JWT y cookies
+- Validación de datos con decoradores de class-validator
+- Soft deletes para mantener integridad de datos
+- Importación de inventario mediante archivo Excel

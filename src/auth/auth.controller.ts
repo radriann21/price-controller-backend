@@ -32,7 +32,10 @@ export class AuthController {
     res.cookie('access_token', token, {
       httpOnly: true,
       secure: true,
-      sameSite: 'strict',
+      sameSite:
+        this.configService.get<string>('NODE_ENV') === 'production'
+          ? 'none'
+          : 'strict',
       maxAge: 1000 * 60 * 60 * 24, // 24 hours
       partitioned: this.configService.get<string>('NODE_ENV') === 'production',
     });

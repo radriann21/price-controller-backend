@@ -4,6 +4,9 @@ export class CreateProductDto {
   @IsString({ message: 'El nombre debe ser una cadena de texto' })
   name: string;
 
+  @IsNumber({}, { message: 'El precio de compra en VES debe ser un número' })
+  buyPriceVes: number;
+
   @IsNumber({}, { message: 'El costo en USD debe ser un número' })
   costUsd: number;
 

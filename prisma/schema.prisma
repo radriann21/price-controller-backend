@@ -44,6 +44,7 @@ model Products {
   costUsd Decimal @db.Decimal(10,2)
   profitMargin Decimal @db.Decimal(5,2)
   priceVes Decimal @db.Decimal(10,2)
+  buyPriceVes Decimal @db.Decimal(10,2)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   isActive Boolean @default(true)

@@ -12,11 +12,15 @@ import {
 import { AuthService } from './auth.service';
 import { LoginDto } from './dto/login.dto';
 import { AuthGuard } from './guards/auth.guard';
+import { ConfigService } from '@nestjs/config';
 import type { Response } from 'express';
 
 @Controller('auth')
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(
+    private readonly authService: AuthService,
+    private readonly configService: ConfigService,
+  ) {}
 
   @HttpCode(201)
   @Post('login')
@@ -28,8 +32,9 @@ export class AuthController {
     res.cookie('access_token', token, {
       httpOnly: true,
       secure: true,
-      sameSite: 'lax',
+      sameSite: 'strict',
       maxAge: 1000 * 60 * 60 * 24, // 24 hours
+      partitioned: this.configService.get<string>('NODE_ENV') === 'production',
     });
     return {
       message: 'Sesión iniciada correctamente',

@@ -1,6 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
-/* eslint-disable @typescript-eslint/no-unsafe-call */
 import { PrismaClient } from 'src/prisma/generated/client';
 import { PrismaPg } from '@prisma/adapter-pg';
 import * as dotenv from 'dotenv';
@@ -17,6 +14,7 @@ async function main() {
   console.log('🌱 Starting seed...');
 
   // Limpiar datos existentes
+  await prisma.historyPrices.deleteMany();
   await prisma.products.deleteMany();
   await prisma.categories.deleteMany();
   await prisma.users.deleteMany();
@@ -65,6 +63,7 @@ async function main() {
     {
       name: 'Laptop Dell Inspiron 15',
       costUsd: 450,
+      buyPriceVes: 16425,
       profitMargin: 25,
       priceVes: 16425,
       categoryId: categoriesMap.computadoras,
@@ -72,6 +71,7 @@ async function main() {
     {
       name: 'Mouse Logitech MX Master 3',
       costUsd: 85,
+      buyPriceVes: 4042.5,
       profitMargin: 30,
       priceVes: 4042.5,
       categoryId: categoriesMap.perifericos,
@@ -79,6 +79,7 @@ async function main() {
     {
       name: 'Teclado Mecánico Keychron K2',
       costUsd: 95,
+      buyPriceVes: 4446,
       profitMargin: 28,
       priceVes: 4446,
       categoryId: categoriesMap.perifericos,
@@ -86,6 +87,7 @@ async function main() {
     {
       name: 'Monitor LG 27" 4K',
       costUsd: 320,
+      buyPriceVes: 14272,
       profitMargin: 22,
       priceVes: 14272,
       categoryId: categoriesMap.monitores,
@@ -93,6 +95,7 @@ async function main() {
     {
       name: 'Auriculares Sony WH-1000XM5',
       costUsd: 280,
+      buyPriceVes: 12908,
       profitMargin: 26,
       priceVes: 12908,
       categoryId: categoriesMap.audio,
@@ -100,6 +103,7 @@ async function main() {
     {
       name: 'Webcam Logitech C920',
       costUsd: 65,
+      buyPriceVes: 3136,
       profitMargin: 32,
       priceVes: 3136,
       categoryId: categoriesMap.perifericos,
@@ -107,6 +111,7 @@ async function main() {
     {
       name: 'SSD Samsung 1TB',
       costUsd: 110,
+      buyPriceVes: 4984,
       profitMargin: 24,
       priceVes: 4984,
       categoryId: categoriesMap.componentes,
@@ -114,6 +119,7 @@ async function main() {
     {
       name: 'RAM Corsair 16GB DDR4',
       costUsd: 75,
+      buyPriceVes: 3537.5,
       profitMargin: 29,
       priceVes: 3537.5,
       categoryId: categoriesMap.componentes,
@@ -121,6 +127,7 @@ async function main() {
     {
       name: 'Tarjeta Gráfica RTX 3060',
       costUsd: 380,
+      buyPriceVes: 16644,
       profitMargin: 20,
       priceVes: 16644,
       categoryId: categoriesMap.componentes,
@@ -128,6 +135,7 @@ async function main() {
     {
       name: 'Silla Gamer Secretlab',
       costUsd: 420,
+      buyPriceVes: 18879,
       profitMargin: 23,
       priceVes: 18879,
       categoryId: categoriesMap.mobiliario,
@@ -135,6 +143,7 @@ async function main() {
     {
       name: 'Micrófono Blue Yeti',
       costUsd: 130,
+      buyPriceVes: 6032.5,
       profitMargin: 27,
       priceVes: 6032.5,
       categoryId: categoriesMap.audio,
@@ -142,6 +151,7 @@ async function main() {
     {
       name: 'Hub USB-C Anker',
       costUsd: 55,
+      buyPriceVes: 2716.25,
       profitMargin: 35,
       priceVes: 2716.25,
       categoryId: categoriesMap.accesorios,

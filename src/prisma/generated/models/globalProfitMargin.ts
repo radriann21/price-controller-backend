@@ -993,11 +993,6 @@ export type globalProfitMarginFindManyArgs<ExtArgs extends runtime.Types.Extensi
    * Skip the first `n` globalProfitMargins.
    */
   skip?: number
-  /**
-   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-   * 
-   * Filter by unique combinations of globalProfitMargins.
-   */
   distinct?: Prisma.GlobalProfitMarginScalarFieldEnum | Prisma.GlobalProfitMarginScalarFieldEnum[]
 }
 

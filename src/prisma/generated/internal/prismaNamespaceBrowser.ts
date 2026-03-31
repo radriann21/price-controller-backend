@@ -113,6 +113,7 @@ export const ProductsScalarFieldEnum = {
   costUsd: 'costUsd',
   profitMargin: 'profitMargin',
   priceVes: 'priceVes',
+  buyPriceVes: 'buyPriceVes',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   isActive: 'isActive',

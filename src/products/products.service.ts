@@ -236,7 +236,7 @@ export class ProductsService {
   async importProductsFromExcel(file: Express.Multer.File) {
     const workbook = XLSX.read(file.buffer, { type: 'buffer' });
     const sheet = workbook.Sheets[workbook.SheetNames[0]];
-    const rawData = XLSX.utils.sheet_to_json(sheet, { header: 1 });
+    const rawData = XLSX.utils.sheet_to_json(sheet, { header: 1 }).slice(1);
 
     if (rawData.length === 0) {
       throw new BadRequestException('Error al leer el archivo excel.');
@@ -249,10 +249,11 @@ export class ProductsService {
     const mappedData = rawData.map(
       (row: unknown[]): ProductsCreateManyInput => {
         const name = row[0] as string;
-        const costUsd = row[1] as number;
-        const profitMargin = row[2] as number;
-        const priceVes = row[3] as number;
-        const categoryName = row[4] as string;
+        const buyPriceVes = row[1] as number;
+        const costUsd = row[2] as number;
+        const profitMargin = row[3] as number;
+        const priceVes = row[4] as number;
+        const categoryName = row[5] as string;
 
         const category = categories.find((cat) => cat.name === categoryName);
         if (!category) {
@@ -263,6 +264,7 @@ export class ProductsService {
 
         return {
           name,
+          buyPriceVes,
           costUsd,
           profitMargin,
           priceVes,

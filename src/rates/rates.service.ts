@@ -8,12 +8,14 @@ import {
 import { PrismaService } from 'src/prisma/prisma.service';
 import { ConfigService } from '@nestjs/config';
 import { Logger } from '@nestjs/common';
-import { GetRateResponse } from './interfaces/rates.interface';
 import { Cron, CronExpression } from '@nestjs/schedule';
 import { Subject } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { SubjectData } from './interfaces/subject.interface';
+import { USER_AGENTS } from 'src/common/constants/UserAgents';
 import axios from 'axios';
+import * as https from 'https';
+import * as cheerio from 'cheerio';
 
 @Injectable()
 export class RatesService implements OnModuleInit {
@@ -122,8 +124,33 @@ export class RatesService implements OnModuleInit {
     }
   }
 
-  private async fetchExternalRate(): Promise<GetRateResponse> {
-    const { data } = await axios.get<GetRateResponse>(this.API_URL);
-    return data;
+  private async fetchExternalRate() {
+    const axiosClient = axios.create({
+      headers: {
+        'User-Agent':
+          USER_AGENTS[Math.floor(Math.random() * USER_AGENTS.length)].value,
+      },
+      timeout: 10000,
+      httpsAgent: new https.Agent({
+        rejectUnauthorized: false,
+        checkServerIdentity: (hostname) => {
+          if (hostname === this.API_URL) {
+            return undefined;
+          }
+          return new Error('Hostname no esperado');
+        },
+      }),
+    });
+
+    const { data }: { data: string } = await axiosClient.get<string>(
+      this.API_URL,
+    );
+
+    const $ = cheerio.load(data);
+    const rawPrice = $('#dolar .centrado strong').text().trim();
+    const cleanPrice = parseFloat(rawPrice.replace(',', '.'));
+
+    this.logger.log(`Precio actual: ${cleanPrice}`);
+    return { price: cleanPrice };
   }
 }

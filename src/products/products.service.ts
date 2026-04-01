@@ -209,26 +209,36 @@ export class ProductsService {
     try {
       return await this.prisma.$transaction(async (tx) => {
         await tx.$queryRaw`
-        INSERT INTO "historyPrices" ("id", "oldPriceVes", "newPriceVes", "product_id")
+        INSERT INTO "historyPrices" ("id", "oldPriceVes", "newPriceVes", "product_id", "createdAt")
         SELECT 
           gen_random_uuid(), 
           "priceVes", 
-          ("costUsd" * (1 + COALESCE("profitMargin", ${globalMargin}) / 100) * ${rate}), 
-          id
+          ROUND(CAST(
+            ("costUsd" * ${rate}) / NULLIF(1 - (COALESCE("profitMargin", ${globalMargin}) / 100.0), 0)
+          AS numeric), 2), 
+          id,
+          NOW()
         FROM "Products"
       `;
 
         await tx.$queryRaw`
         UPDATE "Products"
         SET 
-          "priceVes" = "costUsd" * (1 + COALESCE("profitMargin", ${globalMargin}) / 100) * ${rate},
+          "priceVes" = ROUND(CAST(
+            ("costUsd" * ${rate}) / NULLIF(1 - (COALESCE("profitMargin", ${globalMargin}) / 100.0), 0)
+          AS numeric), 2),
           "updatedAt" = NOW()
       `;
+
+        this.logger.log(
+          `Precios actualizados masivamente. Tasa: ${rate.toString()}, Margen base: ${globalMargin.toString()}%`,
+        );
+        return { success: true, rate, globalMargin };
       });
     } catch (err) {
       this.logger.error('Error updating products prices', err);
       throw new InternalServerErrorException(
-        'Error al procesar la actualización masiva',
+        'Error al procesar la actualización masiva de precios',
       );
     }
   }
